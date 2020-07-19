@@ -1,18 +1,21 @@
 import os
 from flask import Flask, request, abort, jsonify, render_template, session, url_for, redirect
-import json 
-from flask_cors import CORS 
+import json
+from flask_cors import CORS
 from models import setup_db, Magician, Show, db
 from auth import AuthError, requires_auth, requires_signed_in
 from authlib.flask.client import OAuth
 
 
 AUTH0_CALLBACK_URL = 'http://localhost:5000/callback'
-AUTH0_CLIENT_ID = '8I3eP5XFElTZ71kFUtDp3GhZ0qIJ9lv2' 
-AUTH0_CLIENT_SECRET =  'naB0-3lz6-EHpGQaUYt8zQs_bO9b1SqTVrm6Bnb7ewUNLln9RxyBGNOJ3sDPhcrk' 
-AUTH0_DOMAIN = 'dev-v6tg4f3z.us.auth0.com' 
-AUTH0_BASE_URL = 'https://' + 'dev-v6tg4f3z.us.auth0.com'
-AUTH0_AUDIENCE = 'magic'
+# '8I3eP5XFElTZ71kFUtDp3GhZ0qIJ9lv2'
+AUTH0_CLIENT_ID = os.environ.get('AUTH0_CLIENT_ID')
+# 'naB0-3lz6-EHpGQaUYt8zQs_bO9b1SqTVrm6Bnb7ewUNLln9RxyBGNOJ3sDPhcrk'
+AUTH0_CLIENT_SECRET = os.environ.get('AUTH0_CLIENT_SECRET')
+AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN')  # 'dev-v6tg4f3z.us.auth0.com'
+# 'dev-v6tg4f3z.us.auth0.com'
+AUTH0_BASE_URL = 'https://' + os.environ.get('AUTH0_DOMAIN')
+AUTH0_AUDIENCE = os.environ.get('API_AUDIENCE')  # 'magic'
 
 
 def create_app(test_config=None):
@@ -22,14 +25,16 @@ def create_app(test_config=None):
 
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Headers','Content-Type,Authorization,true')
-        response.headers.add('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS')
+        response.headers.add(
+            'Access-Control-Allow-Headers',
+            'Content-Type,Authorization,true')
+        response.headers.add(
+            'Access-Control-Allow-Methods',
+            'GET, PUT, POST, DELETE, OPTIONS')
         return response
 
-    
-    #taken from auth0 website instructions
+    # taken from auth0 website instructions
     oauth = OAuth(app)
-
 
     auth0 = oauth.register(
         'auth0',
@@ -43,11 +48,11 @@ def create_app(test_config=None):
         },
     )
 
-    #taken from instructions at auth0 
+    # taken from instructions at auth0
     @app.route('/')
     def index():
         return 'Healthy app'
-    
+
     # Route for getting all shows
     @app.route('/shows')
     @requires_auth('get:shows')
@@ -60,7 +65,7 @@ def create_app(test_config=None):
                 'success': True,
                 'shows': [show.format() for show in shows],
             }), 200
-        except:
+        except BaseException:
             abort(404)
 
     # Route for getting a specific show
@@ -69,7 +74,7 @@ def create_app(test_config=None):
     def get_show_by_id(jwt, id):
         """Get a specific show route"""
         try:
-            show = Show.query.get(id)   
+            show = Show.query.get(id)
         # return 404 if there is no show with id
             if show is None:
                 abort(400)
@@ -78,7 +83,7 @@ def create_app(test_config=None):
                     'success': True,
                     'show': show.format(),
                 }), 200
-        except:
+        except BaseException:
             abort(404)
 
     @app.route('/shows', methods=['POST'])
@@ -102,7 +107,7 @@ def create_app(test_config=None):
                 'success': True,
                 'show': show.format()
             }), 200
-        except:
+        except BaseException:
             abort(404)
 
     @app.route('/shows/<int:id>', methods=['PATCH'])
@@ -132,7 +137,7 @@ def create_app(test_config=None):
                     'success': True,
                     'show': show.format()
                 }), 200
-            except:
+            except BaseException:
                 abort(422)
         else:
             abort(404)
@@ -152,13 +157,11 @@ def create_app(test_config=None):
                     'message':
                     f'show id {show.id}, show named {show.show_name} was deleted',
                 })
-            except:
+            except BaseException:
                 db.session.rollback()
                 abort(422)
         else:
             abort(404)
-
-
 
     @app.route('/magicians')
     @requires_auth('get:magicians')
@@ -171,7 +174,7 @@ def create_app(test_config=None):
                 'success': True,
                 'magicians': [magician.format() for magician in magicians],
             }), 200
-        except:
+        except BaseException:
             abort(404)
 
     @app.route('/magicians/<int:id>')
@@ -187,7 +190,7 @@ def create_app(test_config=None):
                     'success': True,
                     'magician': magician.format(),
                 }), 200
-        except:
+        except BaseException:
             abort(404)
 
     @app.route('/magicians', methods=['POST'])
@@ -210,7 +213,7 @@ def create_app(test_config=None):
                 'success': True,
                 'magician': magician.format()
             }), 200
-        except:
+        except BaseException:
             abort(422)
 
     @app.route('/magicians/<int:id>', methods=['PATCH'])
@@ -242,7 +245,7 @@ def create_app(test_config=None):
                     'success': True,
                     'magician': magician.format()
                 }), 200
-            except:
+            except BaseException:
                 abort(422)
         else:
             abort(404)
@@ -262,7 +265,7 @@ def create_app(test_config=None):
                     'message':
                     f'magician id {magician.id}, named {magician.name} was deleted',
                 })
-            except:
+            except BaseException:
                 db.session.rollback()
                 abort(422)
         else:
@@ -308,6 +311,7 @@ def create_app(test_config=None):
         return response
 
     return app
+
 
 APP = create_app()
 

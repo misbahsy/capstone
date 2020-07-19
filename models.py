@@ -8,12 +8,14 @@ from datetime import datetime
 db_path = os.environ.get('DATABASE_URL')
 db = SQLAlchemy()
 
+
 def setup_db(app, db_path=db_path):
-    app.config['SQLALCHEMY_DATABASE_URI']=db_path
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_path
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
     db.create_all()
+
 
 class Magician(db.Model):
     __tablename__ = 'magicians'
@@ -42,6 +44,7 @@ class Magician(db.Model):
             'gender': self.gender
         }
 
+
 class Show(db.Model):
     __tablename__ = 'shows'
 
@@ -55,7 +58,7 @@ class Show(db.Model):
 
     def update(self):
         db.session.commit()
-    
+
     def delete(self):
         db.session.delete(self)
         db.session.commit()
@@ -66,4 +69,3 @@ class Show(db.Model):
             'show_name': self.show_name,
             'show_date': self.show_date
         }
-

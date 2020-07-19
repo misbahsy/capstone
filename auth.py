@@ -6,26 +6,28 @@ from jose import jwt
 from urllib.request import urlopen
 
 
-AUTH0_DOMAIN = 'dev-v6tg4f3z.us.auth0.com' #os.environ['AUTH0_DOMAIN']
-ALGORITHMS = ['RS256']
-API_AUDIENCE = 'magic'
+AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN')
+ALGORITHMS = os.environ.get('ALGORITHMS')
+API_AUDIENCE = os.environ.get('API_AUDIENCE')
 
-## AuthError Exception
+# AuthError Exception
 '''
 AuthError Exception
 A standardized way to communicate auth failure modes
 '''
+
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
 
 
-## Auth Header
+# Auth Header
 
 def get_token_auth_header():
 
-    #code inspired from video lectures of Udacity FSND
+    # code inspired from video lectures of Udacity FSND
 
     auth = request.headers.get('Authorization', None)
 
@@ -59,7 +61,7 @@ def get_token_auth_header():
 
 
 def check_permissions(permission, payload):
-    #code inspired by the video lectures from udacity FSND
+    # code inspired by the video lectures from udacity FSND
     if 'permissions' not in payload:
         raise AuthError({
             'code': 'invalid_claims',
@@ -75,7 +77,7 @@ def check_permissions(permission, payload):
 
 
 def verify_decode_jwt(token):
-    #code inspired by the video lectures from udacity FSND
+    # code inspired by the video lectures from udacity FSND
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
     jwks = json.loads(jsonurl.read())
     unverified_header = jwt.get_unverified_header(token)
@@ -124,9 +126,9 @@ def verify_decode_jwt(token):
                 'description': 'Unable to parse authentication token.'
             }, 400)
     raise AuthError({
-                'code': 'invalid_header',
+        'code': 'invalid_header',
                 'description': 'Unable to find the appropriate key.'
-            }, 400)
+    }, 400)
 
 
 def requires_auth(permission=''):
@@ -140,6 +142,7 @@ def requires_auth(permission=''):
 
         return wrapper
     return requires_auth_decorator
+
 
 def requires_signed_in(f):
     @wraps(f)
