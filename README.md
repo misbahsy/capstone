@@ -1,6 +1,6 @@
 # Casting Agency
 
-Site live at : [https://casting-agency-0426.herokuapp.com](https://casting-agency-0426.herokuapp.com)
+Site live at : [https://magic-cap.herokuapp.com/](https://magic-cap.herokuapp.com)
 
 
 The project in this repo builds the backend of a magic show agency who manages and assigns magicians to shows. It is part of the Udacity's fullstack nanodegree program.

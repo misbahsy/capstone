@@ -53,29 +53,33 @@ def create_app(test_config=None):
     @requires_auth('get:shows')
     def get_shows(jwt):
         """Get all shows route"""
+        try:
+            shows = Show.query.all()
 
-        shows = Show.query.all()
-
-        return jsonify({
-            'success': True,
-            'shows': [show.format() for show in shows],
-        }), 200
+            return jsonify({
+                'success': True,
+                'shows': [show.format() for show in shows],
+            }), 200
+        except:
+            abort(404)
 
     # Route for getting a specific show
     @app.route('/shows/<int:id>')
     @requires_auth('get:shows')
     def get_show_by_id(jwt, id):
         """Get a specific show route"""
-        show = Show.query.get(id)
-
+        try:
+            show = Show.query.get(id)   
         # return 404 if there is no show with id
-        if show is None:
+            if show is None:
+                abort(400)
+            else:
+                return jsonify({
+                    'success': True,
+                    'show': show.format(),
+                }), 200
+        except:
             abort(404)
-        else:
-            return jsonify({
-                'success': True,
-                'show': show.format(),
-            }), 200
 
     @app.route('/shows', methods=['POST'])
     @requires_auth('post:shows')
@@ -97,9 +101,9 @@ def create_app(test_config=None):
             return jsonify({
                 'success': True,
                 'show': show.format()
-            }), 201
-        except Exception:
-            abort(500)
+            }), 200
+        except:
+            abort(404)
 
     @app.route('/shows/<int:id>', methods=['PATCH'])
     @requires_auth('patch:shows')
@@ -112,42 +116,47 @@ def create_app(test_config=None):
 
         show = Show.query.get(id)
 
-        if show is None:
+        if show:
+            if show is None:
+                abort(400)
+
+            if show_name is None or show_date is None:
+                abort(400)
+
+            show.show_name = show_name
+            show.show_date = show_date
+
+            try:
+                show.update()
+                return jsonify({
+                    'success': True,
+                    'show': show.format()
+                }), 200
+            except:
+                abort(422)
+        else:
             abort(404)
-
-        if show_name is None or show_date is None:
-            abort(400)
-
-        show.show_name = show_name
-        show.show_date = show_date
-
-        try:
-            show.update()
-            return jsonify({
-                'success': True,
-                'show': show.format()
-            }), 200
-        except Exception:
-            abort(500)
 
     @app.route('/shows/<int:id>', methods=['DELETE'])
     @requires_auth('delete:shows')
     def delete_show(jwt, id):
         """Delete a show route"""
         show = Show.query.get(id)
-
-        if show is None:
+        if show:
+            if show is None:
+                abort(400)
+            try:
+                show.delete()
+                return jsonify({
+                    'success': True,
+                    'message':
+                    f'show id {show.id}, show named {show.show_name} was deleted',
+                })
+            except:
+                db.session.rollback()
+                abort(422)
+        else:
             abort(404)
-        try:
-            show.delete()
-            return jsonify({
-                'success': True,
-                'message':
-                f'show id {show.id}, show_named {show.show_name} was deleted',
-            })
-        except Exception:
-            db.session.rollback()
-            abort(500)
 
 
 
@@ -155,27 +164,31 @@ def create_app(test_config=None):
     @requires_auth('get:magicians')
     def get_magicians(jwt):
         """Get all magicians route"""
+        try:
+            magicians = Magician.query.all()
 
-        magicians = Magician.query.all()
-
-        return jsonify({
-            'success': True,
-            'magicians': [magician.format() for magician in magicians],
-        }), 200
+            return jsonify({
+                'success': True,
+                'magicians': [magician.format() for magician in magicians],
+            }), 200
+        except:
+            abort(404)
 
     @app.route('/magicians/<int:id>')
     @requires_auth('get:magicians')
     def get_magician_by_id(jwt, id):
         """Get all magicians route"""
         magician = Magician.query.get(id)
-
-        if magician is None:
+        try:
+            if magician is None:
+                abort(404)
+            else:
+                return jsonify({
+                    'success': True,
+                    'magician': magician.format(),
+                }), 200
+        except:
             abort(404)
-        else:
-            return jsonify({
-                'success': True,
-                'magician': magician.format(),
-            }), 200
 
     @app.route('/magicians', methods=['POST'])
     @requires_auth('post:magicians')
@@ -196,9 +209,9 @@ def create_app(test_config=None):
             return jsonify({
                 'success': True,
                 'magician': magician.format()
-            }), 201
-        except Exception:
-            abort(500)
+            }), 200
+        except:
+            abort(422)
 
     @app.route('/magicians/<int:id>', methods=['PATCH'])
     @requires_auth('patch:magicians')
@@ -211,44 +224,49 @@ def create_app(test_config=None):
         gender = data.get('gender', None)
 
         magician = Magician.query.get(id)
+        if magician:
 
-        if magician is None:
+            if magician is None:
+                abort(400)
+
+            if name is None or age is None or gender is None:
+                abort(400)
+
+            magician.name = name
+            magician.age = age
+            magician.gender = gender
+
+            try:
+                magician.update()
+                return jsonify({
+                    'success': True,
+                    'magician': magician.format()
+                }), 200
+            except:
+                abort(422)
+        else:
             abort(404)
-
-        if name is None or age is None or gender is None:
-            abort(400)
-
-        magician.name = name
-        magician.age = age
-        magician.gender = gender
-
-        try:
-            magician.update()
-            return jsonify({
-                'success': True,
-                'magician': magician.format()
-            }), 200
-        except Exception:
-            abort(500)
 
     @app.route('/magicians/<int:id>', methods=['DELETE'])
     @requires_auth('delete:magicians')
     def delete_magician(jwt, id):
         """Delete an magician Route"""
         magician = Magician.query.get(id)
-
-        if magician is None:
+        if magician:
+            if magician is None:
+                abort(404)
+            try:
+                magician.delete()
+                return jsonify({
+                    'success': True,
+                    'message':
+                    f'magician id {magician.id}, named {magician.name} was deleted',
+                })
+            except:
+                db.session.rollback()
+                abort(422)
+        else:
             abort(404)
-        try:
-            magician.delete()
-            return jsonify({
-                'success': True,
-                'message':
-                f'magician id {magician.id}, named {magician.name} was deleted',
-            })
-        except Exception:
-            db.session.rollback()
-            abort(500)
 
     # Error Handling
     @app.errorhandler(422)

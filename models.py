@@ -64,6 +64,6 @@ class Show(db.Model):
         return {
             'id': self.id,
             'show_name': self.show_name,
-            'release_date': self.show_date
+            'show_date': self.show_date
         }
 

@@ -7,7 +7,6 @@ from models import setup_db, Show, Magician
 
 # Tokens are formatted as such to limit lenght on a line
 ASSISTANT = ('eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkotU2tTb3BhU3FyMU9FaVlad3FQNiJ9.eyJpc3MiOiJodHRwczovL2Rldi12NnRnNGYzei51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWYxMzUyMGNhZmRiNmMwMDEzMmU1MjVhIiwiYXVkIjoibWFnaWMiLCJpYXQiOjE1OTUxMTExNzksImV4cCI6MTU5NTE5NzU3OSwiYXpwIjoiOEkzZVA1WEZFbFRaNzFrRlV0RHAzR2haMHFJSjlsdjIiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImdldDptYWdpY2lhbnMiLCJnZXQ6c2hvd3MiXX0.jWzNulFyT4zVnLhaMkmOe1wyVMg3n01gzCdFpt2N11Ql8aXEBBOVIG3eYlwqceK1b-kbQbKbwtOXPFQQ0gh61m9nXRR9w2OI_OoudRewnWgOVLy-Rg1ty8dmHSr4jPLFb2qUttstkwLvc5lD-Rp7ZzFA02pU29Pew1Hfn4NSKTWeEm92aaD1HBfrjIbdMaTZetUGInMyh-iBELfLnGFbwEICeQC2nCuyP1TsRwxph9QFus2dNOpkBkbJxJvS9UPz6eSz__MaWk9cJEbfvhJssYzp1N8Fac2s0n1NpQZmD9vj310ykxEckcq2KwqNWvVPbocDl3qZTrFOSIw9n6x_PA') 
-
 DIRECTOR = ('eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkotU2tTb3BhU3FyMU9FaVlad3FQNiJ9.eyJpc3MiOiJodHRwczovL2Rldi12NnRnNGYzei51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWYxMzUyNjc3ZmY2MGQwMDE5ZDY2MzU1IiwiYXVkIjoibWFnaWMiLCJpYXQiOjE1OTUxMTEyNTMsImV4cCI6MTU5NTE5NzY1MywiYXpwIjoiOEkzZVA1WEZFbFRaNzFrRlV0RHAzR2haMHFJSjlsdjIiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTptYWdpY2lhbnMiLCJnZXQ6bWFnaWNpYW5zIiwiZ2V0OnNob3dzIiwicGF0Y2g6bWFnaWNpYW5zIiwicGF0Y2g6c2hvd3MiLCJwb3N0Om1hZ2ljaWFucyJdfQ.noMZjrN8B_HwH4NAhH3QEnimxPIQjnzduYMn_i1X0wt4959syqaibfRddpIuR68lTXed415EhBdAo03It43sm3F5YHBjwidZjHoIea6IQaZoGq_jFl17SwZZLyw_HrOnihJaTimJhjGGPJ8YlhiwGrJ5SaqsJ8o5sb2BgQ6tR0N2ssbG-U2QlX-8U2xzQrqBxsWEptB2YANiqwsEwGJiLV1gjxXjAtVN7ac0aUyAUTopR620UWBMAvo2li3hB1hHlSE2qpJkUGAjpNV8eFq214K95eXojnZEJPdTwMBwLVcDNrC2EZDkHSO6EgFpUTWvfNmlkFIKxlNNhhsMmb98cw') 
 PRODUCER = ('eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkotU2tTb3BhU3FyMU9FaVlad3FQNiJ9.eyJpc3MiOiJodHRwczovL2Rldi12NnRnNGYzei51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWYxMzUyOTZkYmY2ZmYwMDEzNWM4MGY1IiwiYXVkIjoibWFnaWMiLCJpYXQiOjE1OTUxMTEzMTYsImV4cCI6MTU5NTE5NzcxNiwiYXpwIjoiOEkzZVA1WEZFbFRaNzFrRlV0RHAzR2haMHFJSjlsdjIiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTptYWdpY2lhbnMiLCJkZWxldGU6c2hvd3MiLCJnZXQ6bWFnaWNpYW5zIiwiZ2V0OnNob3dzIiwicGF0Y2g6bWFnaWNpYW5zIiwicGF0Y2g6c2hvd3MiLCJwb3N0Om1hZ2ljaWFucyIsInBvc3Q6c2hvd3MiXX0.rE6q-tqgzov8sZhGfliXpp9n0p8kYETqyux05WOIGnmwQ-QmnDzaLJevVsVWTFEWMdLehha3161uozg_fz5TZ56CVwIlG4z6FUt61UqH-bqQofIAQNsmYdZ3THy0wTGJiZfJVWnZEqG5L1LeVOUpU2xkeXF2uXajQYIHBJhvV6jARZJB4l4yiQzbGwyhDQVVQP-LcVEDCWUKdxeqaSfCVuHpzXkURA4CMkDR58RbMT61vubjkqkHI4k3BItDit789nssLaZtRS8os0VXcCUoczXLuSlO52oU4sIda4nk7EUZWjeAzlekQiomOc80-wdJ93CcjTkEhPaqmEg6KVeeAQ')
 
@@ -76,7 +75,7 @@ class CastingAgencyTest(unittest.TestCase):
             headers={'Authorization': f'Bearer {PRODUCER}'}
         )
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['show'])
         #self.assertEqual(data['show']['show_name'], 'The Philosophers Stone')
@@ -119,7 +118,7 @@ class CastingAgencyTest(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['show'])
         self.assertEqual(data['show']['show_name'], 'Magic Wand')
-        #self.assertEqual(data['show']['show_date'],'Tue, 12 Nov 2019 00:00:00 GMT')
+        self.assertEqual(data['show']['show_date'],'Tue, 12 Nov 2019 00:00:00 GMT')
 
     # Test that 400 is returned if no data is sent to update a show
     def test_400_patch_show(self):
@@ -162,7 +161,7 @@ class CastingAgencyTest(unittest.TestCase):
     # tests to delete a show
     def test_delete_show(self):
         response = self.client().delete(
-            '/shows/1',
+            '/shows/3',
             headers={'Authorization': f'Bearer {PRODUCER}'}
         )
         data = json.loads(response.data)
@@ -238,7 +237,7 @@ class CastingAgencyTest(unittest.TestCase):
             headers={'Authorization': f'Bearer {PRODUCER}'}
         )
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertEqual(data['magician']['name'], 'Ron Weasley')
         self.assertEqual(data['magician']['age'], 20)
@@ -324,7 +323,7 @@ class CastingAgencyTest(unittest.TestCase):
     # tests to delete an magician
     def test_delete_magician(self):
         response = self.client().delete(
-            '/magicians/2',
+            '/magicians/3',
             headers={'Authorization': f'Bearer {PRODUCER}'}
         )
         data = json.loads(response.data)
