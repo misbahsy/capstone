@@ -11,11 +11,11 @@ In order to use the API users need to be authenticated. Jwt tokens can be genera
 
 ### Endpoints
 
-#### GET /movies
+#### GET /shows
 
 - General:
 
-  - Returns all the movies.
+  - Returns all the shows.
   - Roles authorized : Assistant, Director, Producer.
 
 - Sample: `curl http://127.0.0.1:5000/shows`
