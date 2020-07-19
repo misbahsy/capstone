@@ -2,9 +2,8 @@
 
 Site live at : [https://casting-agency-0426.herokuapp.com](https://casting-agency-0426.herokuapp.com)
 
-This project my capstone project for Udacity's Fullstack Nanodegree program.
-It models a company that is responsible for creating movies and managing and assigning actors to those movies.
-Authorized users can interact with the API to view,add,update,delete Movies and Actors details.
+
+The project in this repo builds the backend of a magic show agency who manages and assigns magicians to shows. It is part of the Udacity's fullstack nanodegree program.
 
 ## API
 
@@ -17,208 +16,208 @@ In order to use the API users need to be authenticated. Jwt tokens can be genera
 - General:
 
   - Returns all the movies.
-  - Roles authorized : Casting Assistant,Casting Director,Executive Producer.
+  - Roles authorized : Assistant, Director, Producer.
 
 - Sample: `curl http://127.0.0.1:5000/movies`
 
 ```json
 {
-  "movies": [
+  "shows": [
     {
       "id": 1,
-      "release_date": "Mon, 06 May 2019 00:00:00 GMT",
-      "title": "Terminator Dark Fate"
+      "show_date": "Mon, 06 May 2019 00:00:00 GMT",
+      "show_name": "Prisoner of Azkaban"
     },
     {
       "id": 2,
-      "release_date": "Tue, 06 May 2003 00:00:00 GMT",
-      "title": "Terminator Rise of the machines"
+      "show_date": "Tue, 06 May 2003 00:00:00 GMT",
+      "show_name": "Magic Wand"
     }
   ],
   "success": true
 }
 ```
 
-#### GET /movies/\<int:id\>
+#### GET /shows/\<int:id\>
 
 - General:
 
-  - Route for getting a specific movie.
-  - Roles authorized : Casting Assistant,Casting Director,Executive Producer.
+  - Route for getting a specific show.
+  - Roles authorized :  Assistant, Director, Producer.
 
-- Sample: `curl http://127.0.0.1:5000/movies/1`
+- Sample: `curl http://127.0.0.1:5000/shows/1`
 
 ```json
 {
-  "movie": {
+  "show": {
     "id": 1,
-    "release_date": "Mon, 06 May 2019 00:00:00 GMT",
-    "title": "Terminator Dark Fate"
+    "show_date": "Mon, 06 May 2019 00:00:00 GMT",
+    "show_name": "Magic Wand"
   },
   "success": true
 }
 ```
 
-#### POST /movies
+#### POST /shows
 
 - General:
 
-  - Creates a new movie based on a payload.
-  - Roles authorized : Executive Producer.
+  - Creates a new show based on a payload.
+  - Roles authorized : Producer.
 
-- Sample: `curl http://127.0.0.1:5000/movies -X POST -H "Content-Type: application/json" -d '{ "title": "Natasha romanov", "release_date": "2020-05-06" }'`
+- Sample: `curl http://127.0.0.1:5000/shows -X POST -H "Content-Type: application/json" -d '{ "show_name": "Harry Potter", "show_date": "2020-05-06" }'`
 
 ```json
 {
-  "movie": {
+  "show": {
     "id": 3,
-    "release_date": "Wed, 06 May 2020 00:00:00 GMT",
-    "title": "Natasha romanov"
+    "show_date": "Wed, 06 May 2020 00:00:00 GMT",
+    "show_name": "Harry Potter"
   },
   "success": true
 }
 ```
 
-#### PATCH /movies/\<int:id\>
+#### PATCH /shows/\<int:id\>
 
 - General:
 
-  - Patches a movie based on a payload.
-  - Roles authorized : Casting Director, Executive Producer.
+  - Patches a show based on a payload.
+  - Roles authorized : Director, Producer.
 
-- Sample: `curl http://127.0.0.1:5000/movies/3 -X POST -H "Content-Type: application/json" -d '{ "title": "Natasha romanov patched", "release_date": "2020-05-06" }'`
+- Sample: `curl http://127.0.0.1:5000/shows/3 -X POST -H "Content-Type: application/json" -d '{ "show_name": "Harry Potter patched", "show_date": "2020-05-06" }'`
 
 ```json
 {
-  "movie": {
+  "show": {
     "id": 3,
-    "release_date": "Wed, 06 May 2020 00:00:00 GMT",
-    "title": "Natasha romanov patched"
+    "show_date": "Wed, 06 May 2020 00:00:00 GMT",
+    "show_name": "Natasha romanov patched"
   },
   "success": true
 }
 ```
 
-#### DELETE /movies/<int:id\>
+#### DELETE /shows/<int:id\>
 
 - General:
 
-  - Deletes a movies by id form the url parameter.
-  - Roles authorized : Executive Producer.
+  - Deletes a shows by id form the url parameter.
+  - Roles authorized :  Producer.
 
-- Sample: `curl http://127.0.0.1:5000/movies/3 -X DELETE`
+- Sample: `curl http://127.0.0.1:5000/shows/3 -X DELETE`
 
 ```json
 {
-  "message": "movie id 3, titled Natasha romanov patched was deleted",
+  "message": "show id 3, named Harry Potter patched was deleted",
   "success": true
 }
 ```
 
-#### GET /actors
+#### GET /magicians
 
 - General:
 
-  - Returns all the actors.
-  - Roles authorized : Casting Assistant,Casting Director,Executive Producer.
+  - Returns all the magicians.
+  - Roles authorized :  Assistant, Director, Producer.
 
-- Sample: `curl http://127.0.0.1:5000/actors`
+- Sample: `curl http://127.0.0.1:5000/magicians`
 
 ```json
 {
-  "actors": [
+  "magicians": [
     {
-      "age": 40,
+      "age": 20,
       "gender": "male",
       "id": 1,
-      "name": "Will Smith"
+      "name": "Harry Potter"
     },
     {
       "age": 50,
       "gender": "male",
       "id": 2,
-      "name": "Bruce Wills"
+      "name": "Dumbledore"
     }
   ],
   "success": true
 }
 ```
 
-#### GET /actors/\<int:id\>
+#### GET /magicians/\<int:id\>
 
 - General:
 
-  - Route for getting a specific actor.
-  - Roles authorized : Casting Assistant,Casting Director,Executive Producer.
+  - Route for getting a specific magician.
+  - Roles authorized :  Assistant, Director, Producer.
 
-- Sample: `curl http://127.0.0.1:5000/actors/1`
+- Sample: `curl http://127.0.0.1:5000/magicians/1`
 
 ```json
 {
-  "actor": {
-    "age": 40,
+  "magician": {
+    "age": 20,
     "gender": "male",
     "id": 1,
-    "name": "Will Smith"
+    "name": "Harry Potter"
   },
   "success": true
 }
 ```
 
-#### POST /actors
+#### POST /magicians
 
 - General:
 
-  - Creates a new actor based on a payload.
-  - Roles authorized : Casting Director,Executive Producer.
+  - Creates a new magician based on a payload.
+  - Roles authorized : Director, Producer.
 
-- Sample: `curl http://127.0.0.1:5000/actors -X POST -H "Content-Type: application/json" -d '{ "name": "Mary", "age": 22, "gender": "female" }'`
+- Sample: `curl http://127.0.0.1:5000/magicians -X POST -H "Content-Type: application/json" -d '{ "name": "Lisa", "age": 32, "gender": "female" }'`
 
 ```json
 {
-  "actor": {
+  "magician": {
+    "age": 32,
+    "gender": "female",
+    "id": 3,
+    "name": "Lisa"
+  },
+  "success": true
+}
+```
+
+#### PATCH /magicians/\<int:id\>
+
+- General:
+
+  - Patches an magician based on a payload.
+  - Roles authorized : Director, Producer.
+
+- Sample: `curl http://127.0.0.1:5000/magicians/3 -X POST -H "Content-Type: application/json" -d '{ "name": "Lisa", "age": 22, "gender": "female" }'`
+
+```json
+{
+  "magician": {
     "age": 22,
     "gender": "female",
     "id": 3,
-    "name": "Mary"
+    "name": "Lisa"
   },
   "success": true
 }
 ```
 
-#### PATCH /actors/\<int:id\>
+#### DELETE /magicians/<int:id\>
 
 - General:
 
-  - Patches an actor based on a payload.
-  - Roles authorized : Casting Director, Executive Producer.
+  - Deletes an magician by id form the url parameter.
+  - Roles authorized : Director, Producer.
 
-- Sample: `curl http://127.0.0.1:5000/actors/3 -X POST -H "Content-Type: application/json" -d '{ "name": "John", "age": 22, "gender": "female" }'`
-
-```json
-{
-  "actor": {
-    "age": 22,
-    "gender": "female",
-    "id": 3,
-    "name": "John"
-  },
-  "success": true
-}
-```
-
-#### DELETE /actors/<int:id\>
-
-- General:
-
-  - Deletes an actor by id form the url parameter.
-  - Roles authorized : Casting Director,Executive Producer.
-
-- Sample: `curl http://127.0.0.1:5000/actors/3 -X DELETE`
+- Sample: `curl http://127.0.0.1:5000/magicians/3 -X DELETE`
 
 ```json
 {
-  "message": "actor id 3, named John was deleted",
+  "message": "magician id 3, named Lisa was deleted",
   "success": true
 }
 ```
@@ -227,24 +226,10 @@ In order to use the API users need to be authenticated. Jwt tokens can be genera
 
 ## Getting Started
 
-### Installing Dependencies
-
-#### Python 3.7
-
-Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
-
-#### Virtual Enviornment
-
-To setup vurtual environment run the following command
-
-```bash
-pipenv shell
-```
-
 #### Installing Dependencies
 
 ```bash
-pipenv install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 This will install all of the required packages we selected within the `requirements.txt` file.
@@ -271,19 +256,7 @@ source setup.sh
 flask run
 ```
 
-##### Key Dependencies
-
-- [Flask](http://flask.pocoo.org/) is a lightweight backend microservices framework. Flask is required to handle requests and responses.
-
-- [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use handle the lightweight sqlite database. You'll primarily work in app.py and can reference models.py.
-
-- [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross origin requests from our frontend server.
-
-- [Pycodestyle](https://pypi.org/project/pycodestyle/) - pycodestyle is a tool to check your Python code against some of the style conventions in PEP 8.
-
 ## Testing
-
-Replace the jwt tokens in test_app.py with the ones generated on the website.
 
 For testing locally, we need to reset database.
 To reset database, run
