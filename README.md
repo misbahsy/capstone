@@ -1,4 +1,4 @@
-# Casting Agency
+# Magic Shows Agency
 
 Site live at : [https://magic-cap.herokuapp.com/](https://magic-cap.herokuapp.com)
 
@@ -18,7 +18,7 @@ In order to use the API users need to be authenticated. Jwt tokens can be genera
   - Returns all the movies.
   - Roles authorized : Assistant, Director, Producer.
 
-- Sample: `curl http://127.0.0.1:5000/movies`
+- Sample: `curl http://127.0.0.1:5000/shows`
 
 ```json
 {
@@ -269,7 +269,7 @@ python manage.py seed
 
 ### Error Handling
 
-- 401 errors due to RBAC are returned as
+- 403 errors due to RBAC are returned as
 
 ```json
 {
@@ -291,7 +291,7 @@ Other Errors are returned in the following json format:
 The error codes currently returned are:
 
 - 400 – bad request
-- 401 – unauthorized
+- 403 – unauthorized
 - 404 – resource not found
 - 422 – unprocessable
 - 500 – internal server error
